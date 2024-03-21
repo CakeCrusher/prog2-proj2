@@ -33,13 +33,13 @@ int part2() {
             Pixel& layerPixel = layer2.getPixel(x, y);
             const Pixel& carPixel = car.getPixel(x, y);
 
-            layerPixel.red = Image::subtract(layerPixel.red, carPixel.red);
-            layerPixel.green = Image::subtract(layerPixel.green, carPixel.green);
-            layerPixel.blue = Image::subtract(layerPixel.blue, carPixel.blue);
+            layerPixel.red = Image::subtract(carPixel.red, layerPixel.red);
+            layerPixel.green = Image::subtract(carPixel.green, layerPixel.green);
+            layerPixel.blue = Image::subtract(carPixel.blue, layerPixel.blue);
         }
     }
-    layer2.saveTGA("output/part2.tga");
 
+    layer2.saveTGA("output/part2.tga");
     return 0;
 }
 
