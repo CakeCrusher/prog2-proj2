@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 struct Pixel {
     unsigned char blue;
@@ -97,7 +98,7 @@ public:
     static unsigned char multiply(unsigned char p1, unsigned char p2) {
         float np1 = p1 / 255.0f;
         float np2 = p2 / 255.0f;
-        return static_cast<unsigned char>((np1 * np2) * 255);
+        return static_cast<unsigned char>(std::round((np1 * np2) * 255));
     }
 
     static unsigned char screen(unsigned char p1, unsigned char p2) {
