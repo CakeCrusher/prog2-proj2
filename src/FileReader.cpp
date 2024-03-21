@@ -105,7 +105,7 @@ public:
         float np1 = p1 / 255.0f;
         float np2 = p2 / 255.0f;
         float result = 1 - (1 - np1) * (1 - np2);
-        return static_cast<unsigned char>(result * 255);
+        return static_cast<unsigned char>(std::round(result * 255));
     }
 
     static unsigned char subtract(unsigned char p1, unsigned char p2) {
@@ -131,6 +131,6 @@ public:
             result = 1 - 2 * (1 - np1) * (1 - np2);
         }
 
-        return static_cast<unsigned char>(result * 255);
+        return static_cast<unsigned char>(std::round(result * 255));
     }
 };

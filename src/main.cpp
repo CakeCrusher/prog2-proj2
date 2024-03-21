@@ -175,18 +175,19 @@ int part7() {
 int part8() {
     Image car;
     car.loadTGA("input/car.tga");
-
     Image redImage(car.width, car.height);
     Image greenImage(car.width, car.height);
     Image blueImage(car.width, car.height);
     for (int y = 0; y < car.height; y++) {
         for (int x = 0; x < car.width; x++) {
             Pixel originalPixel = car.getPixel(x, y);
-            redImage.getPixel(x, y) = { 0, 0, originalPixel.red };
-            greenImage.getPixel(x, y) = { 0, originalPixel.green, 0 };
-            blueImage.getPixel(x, y) = { originalPixel.blue, 0, 0 };
+
+            redImage.getPixel(x, y) = { originalPixel.red, originalPixel.red, originalPixel.red };
+            greenImage.getPixel(x, y) = { originalPixel.green, originalPixel.green, originalPixel.green };
+            blueImage.getPixel(x, y) = { originalPixel.blue, originalPixel.blue, originalPixel.blue };
         }
     }
+
     redImage.saveTGA("output/part8_r.tga");
     greenImage.saveTGA("output/part8_g.tga");
     blueImage.saveTGA("output/part8_b.tga");
