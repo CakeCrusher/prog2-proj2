@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "image.cpp"
+#include "FileReader.cpp"
 
 int part1() {
     Image layer1;
