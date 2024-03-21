@@ -109,9 +109,10 @@ public:
     }
 
     static unsigned char subtract(unsigned char p1, unsigned char p2) {
-        int result = p1 - p2;
+        int result = static_cast<int>(p1) - p2;
         return result < 0 ? 0 : static_cast<unsigned char>(result);
     }
+
 
     static unsigned char addition(unsigned char p1, unsigned char p2) {
         int result = p1 + p2;
