@@ -75,12 +75,12 @@ public:
         }
 
         unsigned char header[18] = {};
-        header[2] = 2;
+        header[2] = 2; 
         header[12] = width & 0xFF;
         header[13] = (width >> 8) & 0xFF;
         header[14] = height & 0xFF;
         header[15] = (height >> 8) & 0xFF;
-        header[16] = 24;  // bist per pixl
+        header[16] = 24;
 
         binaryOut.write((char*)header, 18);
 
