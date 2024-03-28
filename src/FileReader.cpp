@@ -75,12 +75,18 @@ public:
         }
 
         unsigned char header[18] = {};
-        header[2] = 2; 
+        header[2] = 2;
         header[12] = width & 0xFF;
         header[13] = (width >> 8) & 0xFF;
         header[14] = height & 0xFF;
         header[15] = (height >> 8) & 0xFF;
         header[16] = 24;
+        header[17] = 32;
+        std::cout << "Header: ";
+        for (int i = 0; i < 18; i++) {
+            std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(header[i]) << ":";
+        }
+        std::cout << std::endl;
 
         binaryOut.write((char*)header, 18);
 
