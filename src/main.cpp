@@ -2,9 +2,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cstring>
 #include "FileReader.cpp"
 
-int part1() {
+
+int multiply() {
     Image layer1;
     Image pattern1;
     layer1.loadTGA("input/layer1.tga");
@@ -23,7 +25,7 @@ int part1() {
     pattern1.saveTGA("output/part1.tga");
     return 0;
 }
-int part2() {
+int substract() {
     Image layer2;
     Image car;
     layer2.loadTGA("input/layer2.tga");
@@ -43,7 +45,7 @@ int part2() {
     return 0;
 }
 
-int part3() {
+int multiply_then_screen() {
     Image layer1;
     layer1.loadTGA("input/layer1.tga");
     Image pattern2;
@@ -77,7 +79,7 @@ int part3() {
     return 0;
 }
 
-int part4() {
+int multiply_then_subtract() {
     Image layer2;
     layer2.loadTGA("input/layer2.tga");
     Image circles;
@@ -115,7 +117,7 @@ int part4() {
     return 0;
 }
 
-int part5() {
+int overlay() {
     Image layer1;
     layer1.loadTGA("input/layer1.tga");
 
@@ -138,7 +140,7 @@ int part5() {
     return 0;
 }
 
-int part6() {
+int addGreen() {
     Image car;
     car.loadTGA("input/car.tga");
 
@@ -153,7 +155,7 @@ int part6() {
     return 0;
 }
 
-int part7() {
+int multiplyRed() {
     Image car;
     car.loadTGA("input/car.tga");
 
@@ -172,7 +174,7 @@ int part7() {
     return 0;
 }
 
-int part8() {
+int separateIntoRgb() {
     Image car;
     car.loadTGA("input/car.tga");
     Image redImage(car.width, car.height);
@@ -195,7 +197,7 @@ int part8() {
     return 0;
 }
 
-int part9() {
+int combine3Files() {
     Image redLayer;
     redLayer.loadTGA("input/layer_red.tga");
     Image greenLayer;
@@ -220,7 +222,7 @@ int part9() {
     return 0;
 }
 
-int part10() {
+int rotate180() {
     Image text;
     text.loadTGA("input/text2.tga");
     for (int y = 0; y < text.height / 2; y++) {
@@ -234,16 +236,241 @@ int part10() {
     return 0;
 }
 
-int main() {
-    part1();
-    part2();
-    part3();
-    part4();
-    part5();
-    part6();
-    part7();
-    part8();
-    part9();
-    part10();
+
+
+int main(int argc, char* argv[]) {
+    if (argc == 1 || (argc == 2 && std::strcmp(argv[1], "--help") == 0)) {
+        std::cout << "Usage: " << argv[0] << " <output_image> <input_image> <operation>...\n";
+        std::cout << "Operations:\n"
+            << "  multiply <image>\n"
+            << "  subtract <image>\n"
+            << "  overlay <image>\n"
+            << "  screen <image>\n"
+            << "  flip\n"
+            << "  combine <green_image> <blue_image>\n"
+            << "  onlygreen\n"
+            << "  onlyblue\n"
+            << "  addred <value>\n"
+            << "  addgreen <value>\n"
+            << "  addblue <value>\n"
+            << "  scalered <factor>\n"
+            << "  scalegreen <factor>\n"
+            << "  scaleblue <factor>\n";
+        return 0;
+    }
+
+    std::string outputPath = argv[1];
+    Image result;
+
+    if (!result.loadTGA(argv[2])) {
+        std::cerr << "Failed to load " << argv[2] << std::endl;
+        return 1;
+    }
+
+    int i = 3;
+    while (i < argc) {
+        std::string operation = argv[i];
+
+        if (operation == "multiply") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            Image img;
+            if (!img.loadTGA(argv[i + 1])) {
+                std::cerr << "Invalid file name." << std::endl;
+                return 1;
+            }
+            std::cout << "Multiplying " << argv[1] << " and " << argv[i + 1] << "..." << std::endl;
+            result = ImageManipulator::multiply(result, img);
+            i += 2;
+        }
+        else if (operation == "subtract") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            Image img;
+            if (!img.loadTGA(argv[i + 1])) {
+                std::cerr << "Invalid file name." << std::endl;
+                return 1;
+            }
+            std::cout << "Multiplying " << argv[1] << " and " << argv[i + 1] << "..." << std::endl;
+            result = ImageManipulator::subtract(result, img);
+            i += 2;
+        }
+        else if (operation == "overlay") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            Image img;
+            if (!img.loadTGA(argv[i + 1])) {
+                std::cerr << "Invalid file name." << std::endl;
+                return 1;
+            }
+            result = ImageManipulator::overlay(result, img);
+            i += 2;
+        }
+        else if (operation == "screen") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            Image img;
+            if (!img.loadTGA(argv[i + 1])) {
+                std::cerr << "Invalid file name." << std::endl;
+                return 1;
+            }
+            result = ImageManipulator::screen(result, img);
+            i += 2;
+        }
+        else if (operation == "flip") {
+            result = ImageManipulator::flip(result);
+            std::cerr << "Flipping output of the previous step." << std::endl;
+            i++;
+        }
+        else if (operation == "combine") {
+            if (i + 2 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            Image greenImage, blueImage;
+            if (!greenImage.loadTGA(argv[i + 1])) {
+                std::cerr << "Invalid file name." << std::endl;
+                return 1;
+            }
+            if (!blueImage.loadTGA(argv[i + 2])) {
+                std::cerr << "Invalid file name." << std::endl;
+                return 1;
+            }
+
+            result = ImageManipulator::combine(result, greenImage, blueImage);
+            i += 3;
+        }
+        else if (operation == "onlygreen") {
+            std::cout << "Isolating the green channel..." << std::endl;
+            result = ImageManipulator::onlygreen(result);
+            i++;
+        }
+        else if (operation == "onlyblue") {
+            std::cout << "Isolating the blue channel..." << std::endl;
+            result = ImageManipulator::onlyblue(result);
+            i++;
+        }
+        else if (operation == "addred") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            int value;
+            try {
+                value = std::stoi(argv[i + 1]);
+            }
+            catch (const std::invalid_argument&) {
+                std::cerr << "Invalid argument, expected number.\n";
+                return 1;
+            }
+            std::cout << "Adding +" << value << " to the red channel..." << std::endl;
+            result = ImageManipulator::addred(result, value);
+            i += 2;
+        }
+        else if (operation == "addgreen") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            int value;
+            try {
+                value = std::stoi(argv[i + 1]);
+            }
+            catch (const std::invalid_argument&) {
+                std::cerr << "Invalid argument, expected number.\n";
+                return 1;
+            }
+            std::cout << "Adding +" << value << " to the green channel..." << std::endl;
+            result = ImageManipulator::addgreen(result, value);
+            i += 2;
+        }
+        else if (operation == "addblue") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            int value;
+            try {
+                value = std::stoi(argv[i + 1]);
+            }
+            catch (const std::invalid_argument&) {
+                std::cerr << "Invalid argument, expected number.\n";
+                return 1;
+            }
+            std::cout << "Adding +" << value << " to the blue channel..." << std::endl;
+            result = ImageManipulator::addblue(result, value);
+            i += 2;
+        }
+        else if (operation == "scalered") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            int scale;
+            try {
+                scale = std::stoi(argv[i + 1]);
+            }
+            catch (const std::invalid_argument&) {
+                std::cerr << "Invalid argument, expected number.\n";
+                return 1;
+            }
+            std::cout << "Scaling the red channel by " << scale << "..." << std::endl;
+            result = ImageManipulator::scalered(result, scale);
+            i += 2;
+        }
+        else if (operation == "scalegreen") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            int scale;
+            try {
+                scale = std::stoi(argv[i + 1]);
+            }
+            catch (const std::invalid_argument&) {
+                std::cerr << "Invalid argument, expected number.\n";
+                return 1;
+            }
+            std::cout << "Scaling the green channel by " << scale << "..." << std::endl;
+            result = ImageManipulator::scalegreen(result, scale);
+            i += 2;
+        }
+        else if (operation == "scaleblue") {
+            if (i + 1 >= argc) {
+                std::cerr << "Missing argument.";
+                return 1;
+            }
+            int scale;
+            try {
+                scale = std::stoi(argv[i + 1]);
+            }
+            catch (const std::invalid_argument&) {
+                std::cerr << "Invalid argument, expected number.\n";
+                return 1;
+            }
+            std::cout << "Scaling the blue channel by " << scale << "..." << std::endl;
+            result = ImageManipulator::scaleblue(result, scale);
+            i += 2;
+        }
+        else {
+            std::cerr << "Invalid method name." << std::endl;
+            return 1;
+        }
+    }
+
+    if (!result.saveTGA(outputPath.c_str())) {
+        std::cerr << "Failed to save the result image to " << outputPath << std::endl;
+        return 1;
+    }
+
+    std::cout << "... and saving output to " << outputPath << "!" << std::endl;
     return 0;
 }
