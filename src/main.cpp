@@ -270,7 +270,7 @@ int main(int argc, char* argv[]) {
 
 
     if (!result.loadTGA(argv[2])) {
-        std::cerr << "Failed to load " << argv[2] << std::endl;
+        std::cerr << "Failed to load " << argv[2] << " File does not exist." << std::endl;
         return 1;
     }
 
@@ -285,7 +285,7 @@ int main(int argc, char* argv[]) {
             }
             Image img;
             if (!img.loadTGA(argv[i + 1])) {
-                std::cerr << "Invalid file name." << std::endl;
+                std::cerr << "Invalid argument, invalid file name." << std::endl;
                 return 1;
             }
             std::cout << "Multiplying " << argv[1] << " and " << argv[i + 1] << "..." << std::endl;
@@ -299,7 +299,7 @@ int main(int argc, char* argv[]) {
             }
             Image img;
             if (!img.loadTGA(argv[i + 1])) {
-                std::cerr << "Invalid file name." << std::endl;
+                std::cerr << "Invalid argument, invalid file name." << std::endl;
                 return 1;
             }
             std::cout << "Multiplying " << argv[1] << " and " << argv[i + 1] << "..." << std::endl;
@@ -313,7 +313,7 @@ int main(int argc, char* argv[]) {
             }
             Image img;
             if (!img.loadTGA(argv[i + 1])) {
-                std::cerr << "Invalid file name." << std::endl;
+                std::cerr << "Invalid argument, invalid file name." << std::endl;
                 return 1;
             }
             result = ImageManipulator::overlay(result, img);
@@ -326,7 +326,7 @@ int main(int argc, char* argv[]) {
             }
             Image img;
             if (!img.loadTGA(argv[i + 1])) {
-                std::cerr << "Invalid file name." << std::endl;
+                std::cerr << "Invalid argument, invalid file name." << std::endl;
                 return 1;
             }
             result = ImageManipulator::screen(result, img);
@@ -344,11 +344,11 @@ int main(int argc, char* argv[]) {
             }
             Image greenImage, blueImage;
             if (!greenImage.loadTGA(argv[i + 1])) {
-                std::cerr << "Invalid file name." << std::endl;
+                std::cerr << "Invalid argument, invalid file name." << std::endl;
                 return 1;
             }
             if (!blueImage.loadTGA(argv[i + 2])) {
-                std::cerr << "Invalid file name." << std::endl;
+                std::cerr << "Invalid argument, invalid file name." << std::endl;
                 return 1;
             }
 
