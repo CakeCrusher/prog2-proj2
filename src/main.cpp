@@ -5,6 +5,10 @@
 #include <cstring>
 #include "FileReader.cpp"
 
+bool endsWith(const std::string& str, const std::string& suffix) {
+    return str.size() >= suffix.size() &&
+        str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
+}
 
 int multiply() {
     Image layer1;
@@ -236,8 +240,6 @@ int rotate180() {
     return 0;
 }
 
-
-
 int main(int argc, char* argv[]) {
     if (argc == 1 || (argc == 2 && std::strcmp(argv[1], "--help") == 0)) {
         std::cout << "Usage: " << argv[0] << " <output_image> <input_image> <operation>...\n";
@@ -259,8 +261,13 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
+    if (!endsWith(argv[1], ".tga")) {
+        std::cerr << "Invalid file name." << std::endl;
+        return 1;
+    }
     std::string outputPath = argv[1];
     Image result;
+
 
     if (!result.loadTGA(argv[2])) {
         std::cerr << "Failed to load " << argv[2] << std::endl;

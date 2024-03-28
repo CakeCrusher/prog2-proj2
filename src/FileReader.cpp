@@ -4,6 +4,8 @@
 #include <string>
 #include <cmath>
 
+
+
 struct Pixel {
     unsigned char blue;
     unsigned char green;
@@ -26,7 +28,16 @@ public:
     }
     ~Image() {}
 
+    bool ends2With(const std::string& str, const std::string& suffix) {
+        return str.size() >= suffix.size() &&
+            str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
+    }
+
     bool loadTGA(const std::string& filename) {
+        if (!this->ends2With(filename, ".tga")) {
+            std::cerr << "Invalid file name." << std::endl;
+            return false;
+        }
         std::ifstream binaryIn(filename, std::ios::binary);
         if (!binaryIn) {
             std::cerr << "Could not open file for reading: " << filename << std::endl;
