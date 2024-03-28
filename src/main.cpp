@@ -242,7 +242,10 @@ int rotate180() {
 
 int main(int argc, char* argv[]) {
     if (argc == 1 || (argc == 2 && std::strcmp(argv[1], "--help") == 0)) {
-        std::cout << "Usage: " << argv[0] << " <output_image> <input_image> <operation>...\n";
+        std::cout << "Project 2: Image Processing, Spring 2024" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Usage:" << std::endl;
+        std::cout << "\t./project2.out [output] [firstImage] [method] [...]" << std::endl;
         std::cout << "Operations:\n"
             << "  multiply <image>\n"
             << "  subtract <image>\n"
